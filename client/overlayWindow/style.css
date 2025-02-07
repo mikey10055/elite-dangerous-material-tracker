@@ -1,0 +1,120 @@
+* {box-sizing: border-box;}
+
+body {
+    font-family: monospace;
+}
+
+#route {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.8);
+    line-height: 53px;
+    padding-left: 10px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    font-family: monospace;
+    max-width: 20vw;
+    font-size: 1.2em;
+    border-top: 2px solid #FF8200;
+    border-bottom: 2px solid #FF8200;
+}
+
+#route {
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+#route::-webkit-scrollbar {
+    display: none;
+}
+
+#route span {
+    padding: 0 10px;
+    white-space: nowrap;
+}
+
+
+.current {
+    color: #00BFFF;
+}
+
+
+#income {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    max-width: 20vw;
+    font-size: 1.2em;
+    border-top: 2px solid #FF8200;
+    border-bottom: 2px solid #FF8200;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    font-family: monospace;
+    color: #ffffff;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+
+
+#income div {
+    margin: auto;
+}
+
+.green {
+    color: #00BFFF;
+}
+
+.red {
+    color: #990a0a;
+}
+
+#stats {
+    position: fixed;
+    right: 0;
+    bottom: 52px;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 20vw;
+    /* min-height: 20px; */
+    color: #ffffff;
+    padding: 0 5px;
+    font-family: monospace;
+}
+
+#popup-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 20vw;
+    z-index: 1000;
+}
+
+.popup-message {
+    background: rgba(255, 140, 0, 0.785);
+    color: rgb(0, 0, 0);
+    padding: 15px;
+    font-weight: 700;
+    border: 5px solid rgba(255, 140, 0, 0.9);
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+    font-family: 'Orbitron', monospace;
+    font-size: 20px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.popup-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
