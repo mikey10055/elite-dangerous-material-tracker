@@ -60,11 +60,9 @@ export class Materials {
     }
 
     getMatByLoc(locName) {
-        let raw = this.Raw.find(r => locName.toLowerCase().includes(r.Name_Localised.toLowerCase()));
-        let encoded = this.Encoded.find(r => locName.toLowerCase().includes(r.Name_Localised.toLowerCase()));
-        let manu = this.Manufactured.find(r => locName.toLowerCase().includes(r.Name_Localised.toLowerCase()));
-
-        return [raw, encoded, manu].filter(r => r !== undefined);
+        let all = [...this.Raw, ...this.Encoded, ...this.Manufactured];
+        let found = all.find(r => locName.toLowerCase().includes(r.Name_Localised.toLowerCase()));
+        return found ? [found] : [];
     }
 
     updateUnknownCatergory(name, amount, locName) {
@@ -84,15 +82,23 @@ export class Materials {
             this.updateMaterial("Manufactured", name, amount, locName);
         }
 
+        if (locName == "Modified Embedded Firmware") {
+            console.error(isRaw, isEncoded, isManufactured, name, amount, locName);
+        }
+
     }
 
-    updateMaterial(category, name, amount, locName) {
+    updateMaterial(category, name, amount, locName,t="") {
         let mat = this[category].find(m => m.Name == name);
         if (mat) {
             mat.updateCount(amount);
         } else {
             let mat = new Material(category, name, amount, locName);
             this[category].push(mat);
+        }
+
+        if (locName == "Modified Embedded Firmware") {
+            // console.error(category, name, amount, locName, t);
         }
     }
 

@@ -23,8 +23,3 @@ export function showPopupMessage(message, duration = 5000) {
         setTimeout(() => popup.remove(), 500);
     }, duration);
 }
-
-// Example usage
-showPopupMessage("Mission Updated: Proceed to designated waypoint.");
-setTimeout(() => showPopupMessage("Incoming Transmission: New contract available."), 2000);
-setTimeout(() => showPopupMessage("Warning: Ship integrity at 50%"), 4000);

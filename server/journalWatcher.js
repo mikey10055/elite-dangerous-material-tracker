@@ -2,8 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 const os = require('os');
+const { Config } = require('../config');
 
 const homedir = os.homedir();
+
+const station_outfitting_path = "./server/station_outfitting";
+const station_market_path = "./server/station_market";
 
 class JournalWatcher {
     constructor(journalDir) {
@@ -16,6 +20,52 @@ class JournalWatcher {
     dispatch(eventName, data) {
         const event = new CustomEvent(eventName, { detail: data });
         this.eventManager.dispatchEvent(event);
+    }
+
+    getAllStationFiles() {
+
+        let returnData = {
+            outfitting: [],
+            market: []
+        };
+
+        let outfittingDir = path.join(station_outfitting_path);
+        let dir = fs.readdirSync(outfittingDir);
+
+        for (let index = 0; index < dir.length; index++) {
+            const file = dir[index];
+            if (file.endsWith(".json")) {
+                const filePath = path.join(station_outfitting_path, file);
+                const data = fs.readFileSync(filePath);
+    
+                try {
+                    let json = JSON.parse(data);
+                    returnData.outfitting.push(json);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+
+        let marketDir = path.join(station_market_path);
+        let mardir = fs.readdirSync(marketDir);
+
+        for (let index = 0; index < mardir.length; index++) {
+            const file = mardir[index];
+            if (file.endsWith(".json")) {
+                const filePath = path.join(station_market_path, file);
+                const data = fs.readFileSync(filePath);
+    
+                try {
+                    let json = JSON.parse(data);
+                    returnData.market.push(json);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+
+        return returnData;
     }
 
     startWatching() {
@@ -39,6 +89,26 @@ class JournalWatcher {
                 }
             }
 
+            if (filename && filename.startsWith("Outfitting.json")) {
+                let data = this.getfileData(filePath);
+                if (data.length > 0) {
+                    try {
+                        let json = JSON.parse(data);
+                        this.dispatch("OutfittingUpdate", { json });
+                        
+                        if (Config.saveOutfittingData) {
+                            let fileName = `${json.StationName.replaceAll(" ", "_")}_${json.StarSystem.replace(" ", "_")}.json`;
+                            let pathLoc = path.join(station_outfitting_path, fileName);
+    
+                            fs.writeFileSync(pathLoc, data);
+                        }
+
+                    } catch (error) {
+                        console.log("Outfitting error", error);
+                    }
+                }
+            }
+
 
             if (filename && filename.startsWith("NavRoute.json")) {
                 let data = this.getfileData(filePath);
@@ -58,6 +128,13 @@ class JournalWatcher {
                     try {
                         let json = JSON.parse(data);
                         this.dispatch("MarketUpdate", { json });
+
+                        if (Config.saveMarketData) {
+                            let fileName = `${json.StationName.replaceAll(" ", "_")}_${json.StarSystem.replace(" ", "_")}.json`;
+                            let pathLoc = path.join(station_market_path, fileName);
+
+                            fs.writeFileSync(pathLoc, data);
+                        }
                     } catch (error) {
                         console.log("Market error", error);
                     }

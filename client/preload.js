@@ -1,7 +1,7 @@
 const { contextBridge } = require('electron');
 
 const { JournalWatcher } = require("../server/journalWatcher.js");
-const Config = require('../config.js');
+const { Config } = require('../config.js');
 
 const watcher = new JournalWatcher();
 
@@ -15,7 +15,8 @@ watcher.startWatching();
 
 contextBridge.exposeInMainWorld('journal', {
     on: (name, cb) => watcher.on(name, cb),
-    getNavData: () => watcher.getNavData()
+    getNavData: () => watcher.getNavData(),
+    stations: () => watcher.getAllStationFiles()
 })
 
 contextBridge.exposeInMainWorld('config', Config);

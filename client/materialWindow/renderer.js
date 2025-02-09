@@ -5,6 +5,8 @@ const on = window.journal.on;
 
 let Mats = new Materials();
 
+let Engineers = [];
+
 let Destination = { System: "", Name: "", Body: 0};
 
 const bps = AllBlueprints;
@@ -25,19 +27,29 @@ function renderMaterials() {
     materialsEle.appendChild(matOut);
 
     engineerEle.innerHTML = "";
-    engineerEle.appendChild(bps.html(Mats, searchEle.value));
+    engineerEle.appendChild(bps.html(Mats, searchEle.value, Engineers));
 }
 
-searchEle.addEventListener("input", (e) => {
-    renderMaterials();
-    materialsEle.classList.remove("no-search");
+let timer = null;
 
-    if (e.target.value.length <= 0) {
-        materialsEle.classList.add("no-search");
-    } 
+searchEle.addEventListener("input", (e) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+        renderMaterials();
+        materialsEle.classList.remove("no-search");
+    
+        if (e.target.value.length <= 0) {
+            materialsEle.classList.add("no-search");
+        } 
+    }, 200);
 
 });
 
+
+on("EngineerProgress", ({json}) => {
+    Engineers = json.Engineers;
+    renderMaterials();
+})
 
 on('journalUpdate', ({ filePath, json }) => {
     // console.log(`New entries in ${filePath}:`);
@@ -59,22 +71,20 @@ on("Materials", ({json}) => {
 on("MaterialTrade", ({json}) => {
     const {Paid, Received} = json;
 
-    Mats.updateMaterial(Paid.Category, Paid.Material, -Paid.Quantity, Paid.Material_Localised);
-    Mats.updateMaterial(Received.Category, Received.Material, Received.Quantity, Received.Material_Localised);
+    Mats.updateMaterial(Paid.Category, Paid.Material, -Paid.Quantity, Paid.Material_Localised, "mattrade - paid");
+    Mats.updateMaterial(Received.Category, Received.Material, Received.Quantity, Received.Material_Localised, "mattrade-received");
 
     renderMaterials();
 });
 
 on("MaterialCollected", ({json}) => {
-    Mats.updateMaterial(json.Category, json.Name, json.Count, json.Name_Localised);
+    Mats.updateMaterial(json.Category, json.Name, json.Count, json.Name_Localised, "mat-collected");
     renderMaterials();
 })
 
 on("EngineerCraft", ({json}) => {
     for (let ingIndex = 0; ingIndex < json.Ingredients.length; ingIndex++) {
         const ingred = json.Ingredients[ingIndex];
-        console.log(ingred)
-
         Mats.updateUnknownCatergory(ingred.Name, -ingred.Count, ingred.Name_Localised);
     }
     
@@ -84,9 +94,7 @@ on("EngineerCraft", ({json}) => {
 on("MissionCompleted", ({json}) => {
     let mats = json.MaterialsReward;
     if (mats) {
-        console.log(mats, json);
         if (Array.isArray(mats)) {
-            
             for (let index = 0; index < mats.length; index++) {
                 const mat = mats[index];
                 Mats.updateMaterial(mat.Category_Localised, mat.Name.toLowerCase(), mat.Count, mat.Name_Localised)

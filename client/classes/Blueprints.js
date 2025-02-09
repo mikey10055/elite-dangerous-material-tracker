@@ -12,7 +12,7 @@ export class Blueprint {
         this.grade = data.Grade;
     }
 
-    html(mats, searchValue="") {
+    html(mats, searchValue="", engs) {
 
         let searchSplit = searchValue.split("|");
 
@@ -48,6 +48,8 @@ export class Blueprint {
         for (let index = 0; index < this.ingredients.length; index++) {
             const ingredient = this.ingredients[index];
 
+            let found = mats.getMatByLoc(ingredient.Name);
+
             let ingredientItem = document.createElement("div");
             ingredientItem.classList.add("ingredientItem");
 
@@ -55,13 +57,15 @@ export class Blueprint {
             iname.textContent = ingredient.Name;
 
             let icount = document.createElement("span");
-
-            let found = mats.getMatByLoc(ingredient.Name);
-
+            
+            
+            
             if (found.length > 0) {
-                icount.textContent = `${ingredient.Size} (${found[0].Count})`;
+                let colour = parseInt(ingredient.Size) < parseInt(found[0].Count) ? "green" : "red";
+                icount.innerHTML = `<span class="${colour}">${ingredient.Size} (${found[0].Count})`;
+                iname.innerHTML = `<span class="${found[0].Category}">${found[0].Category.slice(0, 1)}</span> <span> ${ingredient.Name} </span>`;
             } else {
-                icount.textContent = `${ingredient.Size} (0)`;
+                icount.innerHTML = `<span class="red">${ingredient.Size} (0)</span>`;
             }
 
             if (searchValue.length > 0) {
@@ -79,6 +83,26 @@ export class Blueprint {
             ingredientContainer.appendChild(ingredientItem)
         }
 
+        let engineers = document.createElement("div");
+        if (searchValue.length > 0 && this.engineers.join(", ").toLowerCase().includes(searchValue.toLowerCase())) {
+            // engineers.classList.add("found-in-search");
+        }
+        engineers.innerHTML = `Engineers: ${this.engineers.map(r => {
+            let found = engs.find(e => e.Engineer ? e.Engineer.toLowerCase() == r.toLowerCase() : false);
+            let searchFound = searchValue.length > 0 && r.toLowerCase().includes(searchValue.toLowerCase()) ? "found-in-search" : "";
+            if (found) {
+                let colour = found.Rank && found.Rank >= this.grade || this.grade === undefined ? "green" : "red";
+                if (found.Progress == "Invited") {
+                    colour = "yellow";
+                }
+                return `<span title="${found.Progress}" class="${colour} ${searchFound}">${r}</span>`
+            }
+            return `<span class="grey ${searchFound}">${r}</span>`;
+        }).join(", ")}`;
+
+        let effects = document.createElement("div");
+        effects.innerHTML = this.effects.map(r => `<span class="${r.IsGood ? "green" : "red"}">${r.Effect} ${r.Property}</span>`).join(" | ");
+
         div.appendChild(type);
         div.appendChild(name);
 
@@ -87,6 +111,9 @@ export class Blueprint {
             grade.textContent = `Grade: ${this.grade}`;
             div.appendChild(grade);
         }
+        
+        div.appendChild(effects);
+        div.appendChild(engineers);
         div.appendChild(ingredientContainer);
 
         return div;
@@ -114,7 +141,7 @@ export class BlueprintManager {
         return this.blueprints.filter(bp => bp.grade === grade);
     }
 
-    html(mats, searchValue="") {
+    html(mats, searchValue="", engs) {
         let div = document.createElement("div");
 
         let items = {};
@@ -128,7 +155,7 @@ export class BlueprintManager {
                 items[k] = con;
             }
 
-            let b = bp.html(mats, searchValue);
+            let b = bp.html(mats, searchValue, engs);
 
             let hasIngredent = b.querySelector(".found-in-search, .name-found-in-search, .type-found-in-search");
 

@@ -35,11 +35,11 @@ body {
 
 input {
     color: #fdfdfd;
-    background-color: #484848;
+    background-color: #121212;
     border: none;
     outline: none !important;
     font-size: 1.3em;
-    padding: 2px 10px;
+    padding: 8px 10px;
 }
 
 .materials-container {
@@ -60,7 +60,7 @@ input {
     width: 100%;
     color: #ffffff;
     overflow: auto;
-    min-height: 20vh;
+    min-height: 15vh;
 }
 
 .engineer-recipies {
@@ -172,4 +172,20 @@ input {
 }
 .ingredientItem > span:last-child {
     margin-left: auto;
+}
+
+.green {
+    color: #00BFFF;
+}
+
+.red {
+    color: #990a0a;
+}
+
+.grey {
+    color: rgba(149, 149, 149, 0.6)
+}
+
+.yellow {
+    color: #ffe100;
 }

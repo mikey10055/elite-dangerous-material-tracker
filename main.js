@@ -5,6 +5,14 @@ const { appMenu } = require("./server/appMenu.js");
 
 let materialWindow = null;
 let overlayWindow = null;
+let stationSearchWindow = null;
+
+function forceAlwaysOnTop() {
+    if (overlayWindow) {
+        overlayWindow.setAlwaysOnTop(true, "screen-saver");
+        setTimeout(forceAlwaysOnTop, 10000)
+    }
+}
 
 const createMaterialWindow = () => {
     if (materialWindow !== null) {
@@ -34,12 +42,41 @@ const createMaterialWindow = () => {
         materialWindow = null;
     });
 }
+const createStationSearchWindow = () => {
+    if (stationSearchWindow !== null) {
+        stationSearchWindow.focus();
+        return;
+    }
+    const win = new BrowserWindow({
+        width: 1280,
+        height: 900,
+        webPreferences: {
+            preload: path.join(__dirname, "./client/preload.js"),
+            contextIsolation: true,
+            nodeIntegration: true
+        }
+    })
+
+    stationSearchWindow = win;
+
+    // win.webContents.openDevTools();
+
+    win.loadFile("./client/stationSearchWindow/index.html");
+
+    Menu.setApplicationMenu(menu);
+
+    win.on('closed', () => {
+        stationSearchWindow = null;
+    });
+}
 
 const createOverlay = () => {
     if (overlayWindow !== null) {
         overlayWindow.focus();
         return;
     }
+
+
 
     const { width, height } = screen.getPrimaryDisplay().size;
 
@@ -48,7 +85,7 @@ const createOverlay = () => {
         height,
         frame: false,
         transparent: true,
-        alwaysOnTop: true,
+        alwaysOnTop: false,
         fullscreen: true,
         resizable: false,
         webPreferences: {
@@ -59,6 +96,8 @@ const createOverlay = () => {
     });
     
     overlayWindow = win;
+
+    forceAlwaysOnTop();
     
     win.setIgnoreMouseEvents(true); 
     // win.webContents.openDevTools();
@@ -75,8 +114,10 @@ const menu = Menu.buildFromTemplate(
     appMenu({
         createOverlay,
         createMaterialWindow,
+        createStationSearchWindow,
         getMaterialWindow: () => materialWindow,
-        getOverlayWindow: () => overlayWindow
+        getOverlayWindow: () => overlayWindow,
+        getStationSearchWindow: () => stationSearchWindow
     })
 );
 

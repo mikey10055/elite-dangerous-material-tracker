@@ -18,6 +18,13 @@ const appMenu =  (data) => [
                     data.createOverlay()
                 }
             },
+            {
+                label: "Station Search",
+                // accelerator: "CmdOrCtrl+N",
+                click: () => {
+                    data.createStationSearchWindow()
+                }
+            },
             // {
             //     type: "separator"
             // },
@@ -48,6 +55,16 @@ const appMenu =  (data) => [
                 // accelerator: "CmdOrCtrl+M",
                 click: () => {
                     let win = data.getOverlayWindow()
+                    if (win) {
+                        win.webContents.openDevTools();
+                    }
+                }
+            },
+            {
+                label: "Station Search",
+                // accelerator: "CmdOrCtrl+M",
+                click: () => {
+                    let win = data.getStationSearchWindow()
                     if (win) {
                         win.webContents.openDevTools();
                     }
