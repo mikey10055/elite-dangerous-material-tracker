@@ -1,8 +1,14 @@
+import { distance3D } from "../classes/distance.js";
+import { StationTypes } from "../data/stationTypes.js";
+
 const getStationData = window.journal.stations;
 const on = window.journal.on;
 
 
 let stationData = getStationData();
+
+let starsystems = journal.getStarSystems();
+let currentLocation = "";
 
 
 const station1 = document.querySelector("#station1");
@@ -12,6 +18,18 @@ const compEle = document.querySelector("#compare-out")
 let st1val = "";
 let st2val = "";
 
+function formatDate(now) {
+
+    const dd = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const yyyy = now.getFullYear();
+
+    const HH = String(now.getHours()).padStart(2, '0');
+    const MM = String(now.getMinutes()).padStart(2, '0');
+
+    return `${dd}.${mm}.${yyyy} ${HH}:${MM}`;
+}
+
 
 function renderResult() {
     compEle.innerHTML = "";
@@ -19,6 +37,9 @@ function renderResult() {
     let tab = document.createElement("table");
 
     let headers = document.createElement("tr");
+    headers.style.position = "sticky";
+    headers.style.top = "0";
+    headers.style.background = "#282828"
     headers.innerHTML = `<th>Item</th> <th>Buy at Station</th> <th>Stock</th> <th> Buy Price </th> <th>Profit</th> <th> Sell Price </th> <th>Sell to Station</th>`
 
     tab.appendChild(headers);
@@ -27,7 +48,6 @@ function renderResult() {
     let st2 = stationData.market.find(v => v.StationName == st2val);
 
     if (st1 && st2) {
-        console.log(st1, st2)
 
         let st1Items = st1.Items;
         let st2Items = st2.Items;
@@ -68,8 +88,6 @@ function renderResult() {
             return (b.station2Item.SellPrice - b.station1Item.BuyPrice) - (a.station2Item.SellPrice - a.station1Item.BuyPrice)
         })
 
-        console.log(sorted);
-
         for (let index = 0; index < entries.length; index++) {
             const entry = entries[index];
             tab.appendChild(entry.ele);
@@ -81,19 +99,16 @@ function renderResult() {
 
 }
 
-
 station1.addEventListener("change", (e) => {
     st1val = e.target.value;
-    renderResult()
+    renderStationCompares();
+    renderResult();
 });
 
 station2.addEventListener("change", (e) => {
     st2val = e.target.value;
     renderResult()
 })
-
-
-
 
 
 function renderStationCompares() {
@@ -111,17 +126,42 @@ function renderStationCompares() {
     station2.appendChild(op2);
 
     let market = stationData.market;
+
+    let op1SelStation = market.find(m => m.StationName == st1val);
+    // let op2SelStation = market.find(m => m.StationName == st2val); 
+
     for (let index = 0; index < market.length; index++) {
         const station = market[index];
 
         let opt = document.createElement("option");
 
+        const padSize = StationTypes[station.StationType];
+
         opt.value = station.StationName;
-        opt.textContent = `${station.StationName} : ${station.StarSystem}`;
+        opt.textContent = `${station.StationName} : ${station.StarSystem} [${padSize}]`;
+
+        if (st1val == station.StationName) {
+            opt.selected = true;
+        }
+        
+        let distanceFromYou = "?? ";
+        if (op1SelStation ) {
+            let st1loc = starsystems.find(s => s.StarSystem == op1SelStation.StarSystem);
+            let st2loc = starsystems.find(s => s.StarSystem == station.StarSystem);
+    
+            if (st1loc && st2loc) {
+                distanceFromYou = distance3D(st1loc.StarPos, st2loc.StarPos).toFixed(2);
+            }
+        }
+
 
         let opt2 = document.createElement("option");
         opt2.value = station.StationName;
-        opt2.textContent = `${station.StationName} : ${station.StarSystem}`;
+        opt2.textContent = `${station.StationName} : ${station.StarSystem} [${padSize}] (${distanceFromYou}Ly)`;
+
+        if (st2val == station.StationName) {
+            opt2.selected = true;
+        }
 
         station1.appendChild(opt);
         station2.appendChild(opt2);
@@ -136,6 +176,10 @@ const stationsEle = document.querySelector('.station-info-container');
 
 function headers() {
     let dv = document.createElement("tr");
+
+    dv.style.position = "sticky";
+    dv.style.top = "0";
+    dv.style.background = "#282828"
 
     let name = document.createElement("td");
     name.textContent = "Name";
@@ -166,13 +210,25 @@ function renderStations() {
     for (let index = 0; index < outfitting.length; index++) {
         const station = outfitting[index];
 
-        const stationName = `${station.StarSystem} : ${station.StationName}`;
+        const stationName = `${station.StationName} : ${station.StarSystem}`;
+
+        const ts = new Date(station.timestamp);
+
+        const padSize = StationTypes[station.StationType];
+
+        let distanceFromYou = "Unknown ";
+        let cur = starsystems.find(s => s.StarSystem == currentLocation);
+        let thisStation = starsystems.find(s => s.StarSystem == station.StarSystem);
+
+        if (cur && thisStation) {
+            distanceFromYou = distance3D(cur.StarPos, thisStation.StarPos).toFixed(2);
+        }
 
         let tr = document.createElement("tr");
         let td = document.createElement("th");
         td.colSpan = 4;
         td.classList.add("station")
-        td.textContent = stationName;
+        td.innerHTML = `${stationName} (${distanceFromYou}Ly) Largest Pad Size: ${padSize}  <small>(${formatDate(ts)})</small>`;
         tr.appendChild(td);
         table.appendChild(tr);
 
@@ -210,43 +266,6 @@ function renderStations() {
 
         }
 
-
-        // if (searchEle.value.length > 0 && !stationName.includes(searchEle.value)) {
-        //     // tr.classList.add("hide");
-        // } else {
-        // }
-
-
-        // if (searchEle.value.length > 0) {
-        //     let hasComp = station.Items.find(itm => itm.Name_Localised.toLowerCase().includes(searchEle.value.toLowerCase()));
-        //     // let hasComp = station.Items.find(itm => itm.Rare);
-        //     if (hasComp) {
-        //         // tr.classList.add("red");
-        //         let dv = document.createElement("tr");
-                
-        //         let name = document.createElement("td");
-        //             name.textContent = hasComp.Name_Localised;
-        //         let sellsfor = document.createElement("td");
-        //             sellsfor.textContent = hasComp.BuyPrice.toLocaleString();
-        //         let buysfor = document.createElement("td");
-        //             buysfor.textContent = hasComp.SellPrice.toLocaleString();
-        //         let stock = document.createElement("td");
-        //             stock.textContent = hasComp.Stock.toLocaleString();
-    
-        //         // dv.textContent = `${hasComp.Name_Localised} | Sells for: ${hasComp.BuyPrice.toLocaleString()} | Buys for ${hasComp.SellPrice.toLocaleString()} | has ${hasComp.Stock.toLocaleString()}`
-                
-        //         dv.appendChild(name);
-        //         dv.appendChild(sellsfor);
-        //         dv.appendChild(buysfor);
-        //         dv.appendChild(stock);
-
-        //         table.appendChild(headers())
-        //         table.appendChild(dv);
-        //     } else {
-        //         tr.classList.add("hide");
-        //     }
-        // } else {}
-
     }
 
     stationsEle.appendChild(table);
@@ -265,9 +284,27 @@ searchEle.addEventListener("input", (e) => {
 
 renderStations();
 
+on("Location", ({json}) => {
+    currentLocation = json.StarSystem;
+    renderStations();
+    renderStationCompares();
+})
+
+on("FSDJump", ({json}) => {
+    starsystems = journal.getStarSystems();
+    currentLocation = json.StarSystem;
+    renderStationCompares();
+    renderStations();
+})
 
 on("OutfittinUpdate", ({json}) => {
     stationData = getStationData();
     renderStationCompares();
     renderStations();
 });
+
+on("MarketUpdate", ({json}) => {
+    stationData = getStationData();
+    renderStationCompares();
+    renderStations();
+})

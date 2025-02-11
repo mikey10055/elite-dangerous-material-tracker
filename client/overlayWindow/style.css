@@ -91,27 +91,43 @@ body {
 
 #popup-container {
     position: fixed;
-    bottom: 80px;
-    right: 20px;
+    bottom: 180px;
+    right: 0px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 20vw;
+    /* width: 25vw; */
+    width: 600px;
     z-index: 1000;
 }
 
 .popup-message {
-    background: rgba(255, 140, 0, 0.785);
+    /* background: rgba(255, 140, 0, 0.785); */
+    background: linear-gradient(135deg, rgba(136, 52, 0, 0.9) 0%, rgba(0, 0, 0, 0.8) 45% );
     color: rgb(0, 0, 0);
     padding: 15px;
     font-weight: 700;
-    border: 5px solid rgba(255, 140, 0, 0.9);
-    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+    border: 3px solid rgba(136, 52, 0, 0.9);
+    /* box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); */
     font-family: 'Orbitron', monospace;
     font-size: 20px;
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateX(100px);
     transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+    min-height:120px;
+}
+
+.popup-message-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.popup-message-content {
+    font-size: 20px;
+    line-height: 1.4;
+    color: #FF8200;
 }
 
 .popup-message.show {

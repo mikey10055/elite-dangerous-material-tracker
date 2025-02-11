@@ -5,12 +5,15 @@ const on = window.journal.on;
 
 let Mats = new Materials();
 
+let Cargo = journal.getCargo();
+
 let Engineers = [];
 
 let Destination = { System: "", Name: "", Body: 0};
 
 const bps = AllBlueprints;
 
+journal.setLocData(true);
 
 on("Commander", ({json}) => {
     console.log(json);
@@ -27,7 +30,7 @@ function renderMaterials() {
     materialsEle.appendChild(matOut);
 
     engineerEle.innerHTML = "";
-    engineerEle.appendChild(bps.html(Mats, searchEle.value, Engineers));
+    engineerEle.appendChild(bps.html(Mats, searchEle.value, Engineers, Cargo));
 }
 
 let timer = null;
@@ -45,6 +48,10 @@ searchEle.addEventListener("input", (e) => {
 
 });
 
+
+on("CargoUpdate", ({json}) => {
+    Cargo = json;
+})
 
 on("EngineerProgress", ({json}) => {
     Engineers = json.Engineers;

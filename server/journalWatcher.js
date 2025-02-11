@@ -9,17 +9,46 @@ const homedir = os.homedir();
 const station_outfitting_path = "./server/station_outfitting";
 const station_market_path = "./server/station_market";
 
+const starSystemsFile = "./server/starsystems.json";
+
 class JournalWatcher {
     constructor(journalDir) {
         this.journalDir = journalDir ?? path.join(homedir, "/Saved Games/Frontier Developments/Elite Dangerous/");
         this.watcher = null;
         this.eventManager = new EventTarget();
         this.filePositions = new Map();
+
+        this.saveLocationData = false;
+    }
+
+    setLocData(val=true) {
+        this.saveLocationData = val;
     }
 
     dispatch(eventName, data) {
         const event = new CustomEvent(eventName, { detail: data });
         this.eventManager.dispatchEvent(event);
+    }
+
+    getCargo() {
+        let file = path.join(this.journalDir, "Cargo.json");
+
+        let data = fs.readFileSync(file);
+
+        try {
+            let jsn = JSON.parse(data);
+            return jsn;
+        } catch (error) {
+            console.log(error)
+            return {
+                "timestamp": "2025-02-11T16:08:29Z", 
+                "event": "Cargo", 
+                "Vessel": "Ship", 
+                "Count": 0, 
+                "Inventory": []
+            };
+        }
+
     }
 
     getAllStationFiles() {
@@ -42,7 +71,7 @@ class JournalWatcher {
                     let json = JSON.parse(data);
                     returnData.outfitting.push(json);
                 } catch (error) {
-                    console.log(error);
+                    console.log(error, data);
                 }
             }
         }
@@ -85,6 +114,18 @@ class JournalWatcher {
                         this.dispatch("StatusUpdate", { json });
                     } catch (error) {
                         console.log("Status error", error);
+                    }
+                }
+            }
+
+            if (filename && filename.startsWith("Cargo.json")) {
+                let data = this.getfileData(filePath);
+                if (data.length > 0) {
+                    try {
+                        let json = JSON.parse(data);
+                        this.dispatch("CargoUpdate", { json });
+                    } catch (error) {
+                        console.log("Cargo error", error);
                     }
                 }
             }
@@ -170,6 +211,17 @@ class JournalWatcher {
         return fileData;
     }
 
+    getStarSystems() {
+        const starsystems = fs.readFileSync(starSystemsFile);
+        try {
+            let r = JSON.parse(starsystems);
+            return r;
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    }
+
 
     async processFileChange(filePath) {
         try {
@@ -185,8 +237,28 @@ class JournalWatcher {
 
                         for (let index = 0; index < json.length; index++) {
                             const eventObj = json[index];
-                            this.dispatch(eventObj.event, { filePath, json: eventObj });
 
+                            if (this.saveLocationData && eventObj.event === "FSDJump") {
+                                let systems = this.getStarSystems();
+
+                                let findSystem = systems.find(s => s.StarSystem === eventObj.StarSystem);
+                                if (!findSystem) {
+
+                                    systems.push({
+                                        StarSystem: eventObj.StarSystem,
+                                        StarPos: eventObj.StarPos,
+                                        Body: eventObj.Body,
+                                        BodyType: eventObj.BodyType,
+                                        SystemAddress: eventObj.SystemAddress
+                                    });
+
+                                    fs.writeFileSync(starSystemsFile, JSON.stringify(systems));
+                                    this.dispatch("StarSystemsUpdated", { json: systems });
+                                }
+                            }
+
+
+                            this.dispatch(eventObj.event, { filePath, json: eventObj });
                         }
 
                     } catch (error) {

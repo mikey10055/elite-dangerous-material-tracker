@@ -12,7 +12,7 @@ export class Blueprint {
         this.grade = data.Grade;
     }
 
-    html(mats, searchValue="", engs) {
+    html(mats, searchValue="", engs, cargo) {
 
         let searchSplit = searchValue.split("|");
 
@@ -58,15 +58,22 @@ export class Blueprint {
 
             let icount = document.createElement("span");
             
-            
+            let cargoItem = cargo.Inventory.find(itm => itm.Name_Localised == ingredient.Name);
             
             if (found.length > 0) {
-                let colour = parseInt(ingredient.Size) < parseInt(found[0].Count) ? "green" : "red";
+                let colour = parseInt(ingredient.Size) <= parseInt(found[0].Count) ? "green" : "red";
                 icount.innerHTML = `<span class="${colour}">${ingredient.Size} (${found[0].Count})`;
                 iname.innerHTML = `<span class="${found[0].Category}">${found[0].Category.slice(0, 1)}</span> <span> ${ingredient.Name} </span>`;
             } else {
                 icount.innerHTML = `<span class="red">${ingredient.Size} (0)</span>`;
             }
+
+            if (cargoItem) {
+                let colour = parseInt(ingredient.Size) < parseInt(cargoItem.Count) ? "green" : "red";
+                icount.innerHTML = `<span class="${colour}">${ingredient.Size} (${cargoItem.Count})`;
+                iname.innerHTML = `<span class="Commidity">C</span> <span> ${ingredient.Name} </span>`;
+            }
+
 
             if (searchValue.length > 0) {
                 searchSplit.forEach((st) => {
@@ -141,7 +148,7 @@ export class BlueprintManager {
         return this.blueprints.filter(bp => bp.grade === grade);
     }
 
-    html(mats, searchValue="", engs) {
+    html(mats, searchValue="", engs, cargo) {
         let div = document.createElement("div");
 
         let items = {};
@@ -155,7 +162,7 @@ export class BlueprintManager {
                 items[k] = con;
             }
 
-            let b = bp.html(mats, searchValue, engs);
+            let b = bp.html(mats, searchValue, engs, cargo);
 
             let hasIngredent = b.querySelector(".found-in-search, .name-found-in-search, .type-found-in-search");
 

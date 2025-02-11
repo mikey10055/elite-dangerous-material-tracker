@@ -1,4 +1,4 @@
-export function showPopupMessage(message, duration = 5000) {
+export function showPopupMessage(message, content="", duration = 5000) {
     // Ensure container exists
     let container = document.getElementById("popup-container");
     if (!container) {
@@ -10,7 +10,19 @@ export function showPopupMessage(message, duration = 5000) {
     // Create the popup element
     const popup = document.createElement("div");
     popup.classList.add("popup-message");
-    popup.innerText = message;
+    // popup.innerText = message;
+
+    const title = document.createElement("div");
+    const contentEle = document.createElement("div");
+    
+    title.classList.add("popup-message-title")
+    contentEle.classList.add("popup-message-content")
+
+    title.textContent = message;
+    contentEle.textContent = content;
+
+    popup.appendChild(title);
+    popup.appendChild(contentEle);
 
     container.appendChild(popup);
 

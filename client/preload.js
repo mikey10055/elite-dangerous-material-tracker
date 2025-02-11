@@ -16,7 +16,10 @@ watcher.startWatching();
 contextBridge.exposeInMainWorld('journal', {
     on: (name, cb) => watcher.on(name, cb),
     getNavData: () => watcher.getNavData(),
-    stations: () => watcher.getAllStationFiles()
+    stations: () => watcher.getAllStationFiles(),
+    getStarSystems: () => watcher.getStarSystems(),
+    setLocData: (val) => watcher.setLocData(val),
+    getCargo: () => watcher.getCargo()
 })
 
 contextBridge.exposeInMainWorld('config', Config);

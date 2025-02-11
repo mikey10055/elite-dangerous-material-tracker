@@ -13,9 +13,12 @@ let firstLoad = true;
 let Earning = 0;
 let Spending = 0;
 
+let Bounty = 0;
+
 on('journalUpdate', ({ filePath, json }) => {
     firstLoad = true;
 });
+
 
 function renderNav() {
 
@@ -82,6 +85,14 @@ function renderIncome() {
 
 }
 
+function renderStats() {
+    let statsEle = document.querySelector("#stats");
+    statsEle.innerHTML = "";
+
+    statsEle.textContent = `Bounties: ${Bounty.toLocaleString()} (${ (Bounty * 1.5).toLocaleString() })`;
+
+}
+
 function speak(text) {
     if (firstLoad) {
         speakLocalText(text);
@@ -90,6 +101,20 @@ function speak(text) {
 
 renderNav();
 renderIncome();
+
+on("Bounty", ({ json }) => {
+
+    for (let index = 0; index < json.Rewards.length; index++) {
+        const reward = json.Rewards[index];
+
+        if (!isNaN(reward.Reward)) {
+            Bounty += reward.Reward;
+        }
+    }
+
+    renderStats();
+})
+
 
 on("NavDataUpdate", ({json}) => {
     if (json.Route.length > 0) {
@@ -139,8 +164,10 @@ on("MissionCompleted", ({json}) => {
 on("RedeemVoucher", ({json}) => {
     if (!isNaN(json.Amount)) {
         Earning += json.Amount;
+        // Bounty -= json.Amount;
+        Bounty = 0;
     }
-
+    renderStats();
     renderIncome();
 })
 
@@ -224,7 +251,22 @@ on("RestockVehicle", ({json}) => {
 })
 
 on("MaterialCollected", ({ json }) => {
-    showPopupMessage(`Collected ${json.Category} ${json.Count} ${json.Name_Localised}`);
+    showPopupMessage(`Collected ${json.Category}`, `${json.Count} ${json.Name_Localised}`);
 })
 
-window.aaa = showPopupMessage
+
+on("ShipyardBuy", ({json}) => {
+    if (!isNaN(json.ShipPrice)) {
+        Spending += json.ShipPrice;
+    }
+    renderIncome();
+})
+
+on("ShipyardSell", ({json}) => {
+    if(!isNaN(json.ShipPrice)) {
+        Earning += json.ShipPrice;
+    }
+    renderIncome();
+})
+
+window.aaa = showPopupMessage;

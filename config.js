@@ -2,7 +2,7 @@ const Config = {
     EnableTTS: false,
     EnableOverlay: false,
     saveOutfittingData: false,
-    saveMarketData: false,
+    saveMarketData: true,
 }
 
 

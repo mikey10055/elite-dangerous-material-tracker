@@ -33693,7 +33693,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33722,7 +33722,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33747,7 +33747,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Module Blueprint Segment",
+        "Name": "Guardian Module Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33776,7 +33776,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Module Blueprint Segment",
+        "Name": "Guardian Module Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33805,7 +33805,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33834,7 +33834,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33863,7 +33863,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33888,7 +33888,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 2
       },
       {
@@ -33917,7 +33917,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 2
       },
       {
@@ -33946,7 +33946,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -33971,7 +33971,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Module Blueprint Segment",
+        "Name": "Guardian Module Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34000,7 +34000,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Module Blueprint Segment",
+        "Name": "Guardian Module Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34029,7 +34029,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Module Blueprint Segment",
+        "Name": "Guardian Module Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34062,7 +34062,7 @@ export const Blueprints = [
         "Size": 28
       },
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34091,7 +34091,7 @@ export const Blueprints = [
         "Size": 18
       },
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34116,7 +34116,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34141,7 +34141,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 2
       },
       {
@@ -34170,7 +34170,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 2
       },
       {
@@ -34199,7 +34199,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34224,7 +34224,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Module Blueprint Segment",
+        "Name": "Guardian Module Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34253,7 +34253,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34282,7 +34282,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34315,7 +34315,7 @@ export const Blueprints = [
         "Size": 5
       },
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34340,7 +34340,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34373,7 +34373,7 @@ export const Blueprints = [
         "Size": 5
       },
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34398,7 +34398,7 @@ export const Blueprints = [
     ],
     "Ingredients": [
       {
-        "Name": "Guardian Weapon Blueprint Segment",
+        "Name": "Guardian Weapon Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34435,7 +34435,7 @@ export const Blueprints = [
         "Size": 18
       },
       {
-        "Name": "Guardian Vessel Blueprint Segment",
+        "Name": "Guardian Vessel Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34464,7 +34464,7 @@ export const Blueprints = [
         "Size": 18
       },
       {
-        "Name": "Guardian Vessel Blueprint Segment",
+        "Name": "Guardian Vessel Blueprint Fragment",
         "Size": 1
       },
       {
@@ -34489,7 +34489,7 @@ export const Blueprints = [
         "Size": 25
       },
       {
-        "Name": "Guardian Vessel Blueprint Segment",
+        "Name": "Guardian Vessel Blueprint Fragment",
         "Size": 1
       },
       {
