@@ -51,6 +51,7 @@ searchEle.addEventListener("input", (e) => {
 
 on("CargoUpdate", ({json}) => {
     Cargo = json;
+    renderMaterials();
 })
 
 on("EngineerProgress", ({json}) => {
