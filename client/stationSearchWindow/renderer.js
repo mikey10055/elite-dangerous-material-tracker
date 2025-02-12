@@ -178,7 +178,7 @@ function headers() {
     let dv = document.createElement("tr");
 
     dv.style.position = "sticky";
-    dv.style.top = "0";
+    dv.style.top = "38px";
     dv.style.background = "#282828"
 
     let name = document.createElement("td");
@@ -225,6 +225,11 @@ function renderStations() {
         }
 
         let tr = document.createElement("tr");
+
+        tr.style.position = "sticky";
+        tr.style.top = "0";
+        tr.style.background = "#282828"
+
         let td = document.createElement("th");
         td.colSpan = 4;
         td.classList.add("station")
